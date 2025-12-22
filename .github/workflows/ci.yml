@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: ["dev", "main"]
+  pull_request:
+    branches: ["dev", "main"]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - run: python -m pip install --upgrade pip
+      - run: pip install -r requirements.txt
+
+      # ✅ Adjust this depending on your backend structure:
+      # If your file is backend/app/main.py -> use "import app.main"
+      # If your file is backend/src/app/main.py -> use "import app.main" BUT ensure PYTHONPATH
+      - name: Backend import check
+        run: |
+          python -c "import app.main; print('backend import ok')"
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - run: npm ci
+      - run: npm run build
