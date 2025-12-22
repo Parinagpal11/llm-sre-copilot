@@ -1,0 +1,16 @@
+# env
+.env
+*.env
+
+# python
+__pycache__/
+.venv/
+venv/
+
+# node
+node_modules/
+.next/
+dist/
+
+# misc
+.DS_Store
